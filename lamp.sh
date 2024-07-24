@@ -3,6 +3,17 @@
 # Definimos el fichero log donde se almacenan los errores y salidas del script
 LOGFILE="log.log"
 
+# Definimos los colores para los mensajes
+COLOR_RESET="\e[0m"     # Texto blanco normal
+COLOR_BLUE="\e[34m"     # Texto azul para mensajes informativos
+COLOR_RED="\e[31m"      # Texto rojo para mensajes de error
+COLOR_GREEN="\e[32m"    # Texto verde para mensajes de éxito
+COLOR_YELLOW="\e[33m"   # Texto amarillo para mensajes de advertencia
+COLOR_MAGENTA="\e[35m"  # Texto magenta para submensajes
+COLOR_CYAN="\e[36m"     # Texto cyan para mensajes de información
+COLOR_BOLD="\e[1m"      # Texto en negrita
+COLOR_UNDERLINE="\e[4m" # Texto subrayado
+
 # Registramos la fecha y hora de registro en el log
 {
     echo "........"
@@ -14,8 +25,7 @@ LOGFILE="log.log"
 echo "........................................."
 echo "${COLOR_YELLOW}${COLOR_BOLD}Ciber2 ServerSide${COLOR_RESET} - ${COLOR_MAGENTA}${COLOR_UNDERLINE}ciber2info@gmail.com${COLOR_RESET}"
 echo "........................................."
-echo "........"
-echo "Iniciando instalación y configuración de LAMP..."
+echo "${COLOR_CYAN}Iniciando instalación y configuración de LAMP...${COLOR_RESET}"
 sleep 2
 
 # Instalación y configuración de LAMP
@@ -55,5 +65,6 @@ fi
 echo "........"
 echo "Servidor Apache2 instalado y configurado correctamente."
 echo "........"
+echo "Espere un momento, volviendo al menú principal..."
 sleep 3
 sh ./servidor.sh
