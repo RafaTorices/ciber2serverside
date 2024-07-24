@@ -21,7 +21,7 @@ echo "........................................."
 echo "${COLOR_CYAN}Bienvenido al script de config del Servidor, siga las instrucciones por pantalla...${COLOR_RESET}"
 echo "........"
 echo "Iniciando script de config del Servidor..."
-echo "${COLOR_YELLOW}(Introduza su password *${COLOR_BOLD}${COLOR_UNDERLINE}solamente*${COLOR_RESET} si se le solicita para actuar como usuario sudoer)${COLOR_RESET}"
+# echo "${COLOR_YELLOW}(Introduza su password *${COLOR_BOLD}${COLOR_UNDERLINE}solamente*${COLOR_RESET} si se le solicita para actuar como usuario sudoer)${COLOR_RESET}"
 
 # Registramos la fecha y hora de registro en el log
 {
@@ -60,6 +60,12 @@ if [ $? -ne 0 ]; then
 fi
 
 # 1.Actualizamos el sistema
+if sudo -n true 2>/dev/null; then
+    echo "........"
+    echo "Configurando componentes..."
+else
+    echo "${COLOR_YELLOW}(Introduza su password para actuar como usuario sudoer)${COLOR_RESET}"
+fi
 sudo apt-get update -y >/dev/null 2>>"$LOGFILE"
 # Si el código de salida del último comando es distinto de 0, mostramos un mensaje de error por pantalla al usuario
 if [ $? -ne 0 ]; then
