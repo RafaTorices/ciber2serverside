@@ -22,7 +22,8 @@ echo "${COLOR_YELLOW}${COLOR_BOLD}Ciber2 ServerSide${COLOR_RESET} - ${COLOR_MAGE
 echo "........................................."
 echo "${COLOR_BLUE}Bienvenido al script de config del Servidor, siga las instrucciones por pantalla...${COLOR_RESET}"
 echo "........"
-echo "Iniciando script de config del Servidor..."
+echo "Iniciando script de config del Servidor...
+\n${COLOR_YELLOW}(Introduza su password si se le solicita para actuar como usuario sudoer)${COLOR_RESET}"
 
 # Registramos la fecha y hora de registro en el log
 {
