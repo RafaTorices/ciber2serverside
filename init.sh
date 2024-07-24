@@ -103,7 +103,7 @@ else
             echo "........"
             sleep 2
             # Mostramos la interfaz gráfica
-            sh ./pre-opciones.sh
+            sh ./opciones.sh
         fi
     fi
 fi
