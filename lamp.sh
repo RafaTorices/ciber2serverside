@@ -63,8 +63,8 @@ if [ $? -ne 0 ]; then
     sh ./servidor.sh
 fi
 echo "........"
-echo "Servidor Apache2 instalado y configurado correctamente."
+echo "${COLOR_GREEN}Servidor Apache2 instalado y configurado correctamente.${COLOR_RESET}"
 echo "........"
-echo "Espere un momento, volviendo al menú principal..."
+echo "${COLOR_CYAN}Espere un momento, volviendo al menú principal...${COLOR_RESET}"
 sleep 3
 sh ./servidor.sh
