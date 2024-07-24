@@ -11,9 +11,11 @@ LOGFILE="log.log"
 } >>"$LOGFILE"
 
 # Mostramos un mensaje informativo al usuario de inicio del script
+echo "........................................."
+echo "${COLOR_YELLOW}${COLOR_BOLD}Ciber2 ServerSide${COLOR_RESET} - ${COLOR_MAGENTA}${COLOR_UNDERLINE}ciber2info@gmail.com${COLOR_RESET}"
+echo "........................................."
 echo "........"
 echo "Iniciando instalación y configuración de LAMP..."
-echo "........"
 sleep 2
 
 # Instalación y configuración de LAMP
@@ -30,7 +32,6 @@ fi
 # Levantamos el servicio de Apache2 y lo habilitamos para que se inicie en el arranque del sistema e informamos al usuario
 echo "........"
 echo "Levantando el servicio de Apache2..."
-echo "........"
 sleep 2
 
 sudo systemctl start apache2 >/dev/null 2>>"$LOGFILE"
