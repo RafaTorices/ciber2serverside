@@ -25,7 +25,5 @@ loading() {
             sleep $interval
         done
     done
-    # Imprimir un mensaje final cuando la carga haya terminado
-    echo "Abriendo la interfaz gráfica....."
-    sleep 3
+    # OPCIONAL: Imprimir un mensaje final cuando la carga haya terminado
 }
