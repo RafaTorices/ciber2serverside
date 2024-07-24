@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Cargamos funciones internas de nuestra aplicación
+. ./loading.sh
+
 # Definimos el fichero log donde se almacenan los errores y salidas del script
 LOGFILE="log.log"
 
@@ -53,20 +56,12 @@ else
             echo "Ha ocurrido un error. Consulte el archivo de log: ${COLOR_RED}$LOGFILE${COLOR_RESET} para detalles."
             echo "........"
         else
-            # 4.Lanzamos el script de opciones inicial
-            sudo chmod +x init_options.sh >/dev/null 2>>"$LOGFILE" # Damos permisos de ejecución al script
-            sudo ./init_options.sh >/dev/null 2>>"$LOGFILE"        # Redirigimos la salida a /dev/null y los errores al log
-            # Si el código de salida del último comando es distinto de 0, mostramos un mensaje de error por pantalla al usuario
-            if [ $? -ne 0 ]; then
-                echo "........"
-                echo "Ha ocurrido un error. Consulte el archivo de log: ${COLOR_RED}$LOGFILE${COLOR_RESET} para detalles."
-                echo "........"
-            else # Si el código de salida del último comando es 0, mostramos un mensaje de éxito por pantalla al usuario
-                echo "Update, Upgrade, paquete dialog instalados con éxito." >>"$LOGFILE"
-                echo "........"
-                echo "${COLOR_GREEN}Proceso completado con éxito.${COLOR_RESET}"
-                echo "........"
-            fi
+            echo "Update, Upgrade, paquete dialog instalados con éxito." >>"$LOGFILE"
+            echo "........"
+            echo "${COLOR_GREEN}Proceso completado con éxito.${COLOR_RESET}"
+            echo "........"
+            echo "Cargando la interfaz gráfica..."
+            loading
         fi
     fi
 fi
