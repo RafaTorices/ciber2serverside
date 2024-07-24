@@ -42,7 +42,7 @@ ejecutar_script1() {
 while true; do
     opcion=$(dialog --clear --title "Ciber2 Server Side" \
         --menu "Seleccione la opción a ejecutar:" 15 50 4 \
-        1 "Configuración de Servidor" \
+        1 "Configuración de Servidor Web" \
         2 "VirtualHost de desarrollo básico" \
         3 "VirtualHost de desarrollo WORDPRESS" \
         4 "VirtualHost de desarrollo JOOMLA" \
