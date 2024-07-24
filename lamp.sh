@@ -10,6 +10,12 @@ LOGFILE="log.log"
     echo "........"
 } >>"$LOGFILE"
 
+# Mostramos un mensaje informativo al usuario de inicio del script
+echo "........"
+echo "Iniciando instalación y configuración de LAMP..."
+echo "........"
+sleep 2
+
 # Instalación y configuración de LAMP
 sudo apt-get install apache2 -y >/dev/null 2>>"$LOGFILE"
 # Si el código de salida del último comando es distinto de 0, mostramos un mensaje de error por pantalla al usuario
@@ -20,7 +26,14 @@ if [ $? -ne 0 ]; then
     sleep 3
     sh ./servidor.sh
 fi
-sudo systemctl start apache2 -y >/dev/null 2>>"$LOGFILE"
+
+# Levantamos el servicio de Apache2 y lo habilitamos para que se inicie en el arranque del sistema e informamos al usuario
+echo "........"
+echo "Levantando el servicio de Apache2..."
+echo "........"
+sleep 2
+
+sudo systemctl start apache2 >/dev/null 2>>"$LOGFILE"
 # Si el código de salida del último comando es distinto de 0, mostramos un mensaje de error por pantalla al usuario
 if [ $? -ne 0 ]; then
     echo "........"
@@ -29,7 +42,7 @@ if [ $? -ne 0 ]; then
     sleep 3
     sh ./servidor.sh
 fi
-sudo systemctl enable apache2 -y >/dev/null 2>>"$LOGFILE"
+sudo systemctl enable apache2 >/dev/null 2>>"$LOGFILE"
 # Si el código de salida del último comando es distinto de 0, mostramos un mensaje de error por pantalla al usuario
 if [ $? -ne 0 ]; then
     echo "........"
