@@ -54,8 +54,8 @@ else
             echo "........"
         else
             # 4.Lanzamos el script de opciones inicial
-            sudo chmod +x init_options.sh                   # Damos permisos de ejecución al script
-            sudo ./init_options.sh >/dev/null 2>>"$LOGFILE" # Redirigimos la salida a /dev/null y los errores al log
+            sudo chmod +x init_options.sh >/dev/null 2>>"$LOGFILE" # Damos permisos de ejecución al script
+            sudo ./init_options.sh >/dev/null 2>>"$LOGFILE"        # Redirigimos la salida a /dev/null y los errores al log
             # Si el código de salida del último comando es distinto de 0, mostramos un mensaje de error por pantalla al usuario
             if [ $? -ne 0 ]; then
                 echo "........"
