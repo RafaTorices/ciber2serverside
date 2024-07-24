@@ -62,7 +62,7 @@ fi
 # 1.Actualizamos el sistema
 if sudo -n true 2>/dev/null; then
     echo "........"
-    echo "Configurando componentes..."
+    echo "Actualizando el sistema e instalando componentes..."
 else
     echo "${COLOR_YELLOW}(Introduza su password para actuar como usuario sudoer)${COLOR_RESET}"
 fi
