@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Fichero log
-LOGFILE="log.log"
+LOGFILE="app.log"
+APP_TITULO="Ciber2 ServerSide"
 
 # Colores para los mensajes
 COLOR_RESET="\e[0m"     # Texto blanco normal
@@ -17,7 +18,7 @@ COLOR_UNDERLINE="\e[4m" # Texto subrayado
 # Mensaje cabecera de los scripts
 mostrarCabecera() {
     echo "........................................."
-    echo "${COLOR_YELLOW}${COLOR_BOLD}Ciber2 ServerSide${COLOR_RESET} - ${COLOR_MAGENTA}${COLOR_UNDERLINE}ciber2info@gmail.com${COLOR_RESET}"
+    echo "${COLOR_YELLOW}${COLOR_BOLD}$APP_TITULO${COLOR_RESET} - ${COLOR_MAGENTA}${COLOR_UNDERLINE}ciber2info@gmail.com${COLOR_RESET}"
     echo "........................................."
 }
 
@@ -89,4 +90,17 @@ comprobarPaquete() {
     else
         return 1
     fi
+}
+
+# Función para mostrar error en ventana dialog
+mostrarErrorDialog() {
+    local error_message="$1"
+    dialog --title "$APP_TITULO" --msgbox "$error_message" 10 50
+    clear
+}
+
+mostrarOKDialog() {
+    local ok_message="$1"
+    dialog --title $APP_TITULO --msgbox "$ok_message" 10 50
+    clear
 }

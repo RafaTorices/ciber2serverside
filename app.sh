@@ -27,7 +27,7 @@ fi
 
 # Bucle para mostrar el menú y obtener la opción del usuario
 while true; do
-    opcion=$(dialog --clear --title "Ciber2 Server Side" \
+    opcion=$(dialog --clear --title "$APP_TITULO" \
         --menu "Seleccione la opción a ejecutar:" 15 50 4 \
         1 "Configuración de Servidor Web" \
         2 "VirtualHost de desarrollo básico" \
@@ -45,7 +45,7 @@ while true; do
     3) ejecutar_script3 ;;
     4) ejecutar_script4 ;;
     5)
-        echo "\n${COLOR_RED}Cerrando${COLOR_RESET} Ciber2 ServerSide..."
+        echo "\n${COLOR_RED}Cerrando${COLOR_RESET} $APP_TITULO..."
         echo "${COLOR_GREEN}¡Hasta luego!\n${COLOR_RESET}"
         break
         ;;

@@ -1,9 +1,12 @@
 #!/bin/bash
 
+# Import de las funciones
+. ./servidor/lamp.sh
+
 # Función para mostrar las opciones de config del servidor
 mostrarOpcionesServidor() {
     while true; do
-        opcion=$(dialog --clear --title "Ciber2 Server Side" \
+        opcion=$(dialog --clear --title "$APP_TITULO" \
             --menu "Seleccione el entorno a configurar:" 15 50 4 \
             1 "LAMP (Linux-Apache-MySQL-PHP)" \
             2 "LEMP (Linux-Nginx-MySQL-PHP)" \
@@ -13,8 +16,7 @@ mostrarOpcionesServidor() {
         clear
         case $opcion in
         1)
-            sh ./servidor/lamp.sh
-            break
+            instalarApache2
             ;;
         2) ejecutar_script2 ;;
         3) ejecutar_script3 ;;
