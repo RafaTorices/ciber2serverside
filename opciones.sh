@@ -1,36 +1,5 @@
 #!/bin/bash
 
-# Menú de pre-opciones con dialog en Bash para mostrar al usuario las opciones disponibles
-
-# Función para cargar un script desde un archivo y comprobar posible error
-load_script() {
-    local SCRIPT="$1"
-
-    # Comprobar si el archivo existe
-    if [ -f "$SCRIPT" ]; then
-        # Importar el script
-        . "$SCRIPT"
-        # Comprobar si hubo un error en la importación
-        if [ $? -ne 0 ]; then
-            return 1 # Devolver un código de error
-        else
-            return 0 # Devolver un código de éxito
-        fi
-    else
-        return 1 # Devolver un código de error
-    fi
-}
-
-# Cargamos funciones internas de nuestra aplicación
-# Cargamos loading
-SCRIPTNAME="loading.sh"
-load_script "./$SCRIPTNAME"
-if [ $? -ne 0 ]; then
-    echo "Error con el import del script $SCRIPTNAME, no se ha podido importar." >>"$LOGFILE"
-    echo "Ha ocurrido un ${COLOR_BOLD}${COLOR_RED}error.${COLOR_RESET} Consulte el archivo de log: ${COLOR_RED}$LOGFILE${COLOR_RESET} para detalles."
-    exit 1
-fi
-
 # Función para ejecutar el script1
 ejecutar_script1() {
     echo "Ejecutando script1..."
@@ -58,9 +27,9 @@ while true; do
     3) ejecutar_script3 ;;
     4) ejecutar_script4 ;;
     5)
-        echo "Cerrando Ciber2 Server Side..."
-        loading
-        echo "\n¡Hasta luego!\n"
+        echo "\n${COLOR_RED}Cerrando${COLOR_RESET} Ciber2 Server Side, espere por favor..."
+        sleep 2
+        echo "${COLOR_GREEN}¡Hasta luego!\n${COLOR_RESET}"
         break
         ;;
     *) echo "Opción inválida. Por favor, intente de nuevo." ;;
