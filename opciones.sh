@@ -1,8 +1,25 @@
 #!/bin/bash
 
-# Script para mostrar opciones al usuario mediante un menú
-# Importamos config.sh
+# Script para mostrar las opciones principales
+
+# Importamos el script de configuración
 . ./config.sh
+
+# Importamos servidor
+. ./servidor.sh
+
+# Comprobamos que el paquete dialog está instalado
+if ! comprobarPaquete dialog; then
+    mostrarCabecera
+    mostrarError
+    echo "El paquete 'dialog' no está instalado." >>"$LOGFILE"
+    echo "Por favor, instale el paquete 'dialog' para continuar." >>"$LOGFILE"
+    exit 1
+else
+    registrarHoraLog
+    echo "El paquete 'dialog' está instalado." >>"$LOGFILE"
+    echo "Se abre el menú de opciones." >>"$LOGFILE"
+fi
 
 # Bucle para mostrar el menú y obtener la opción del usuario
 while true; do
@@ -17,7 +34,7 @@ while true; do
     clear
     case $opcion in
     1)
-        sh servidor.sh
+        mostrarOpcionesServidor
         break
         ;;
     2) ejecutar_script2 ;;

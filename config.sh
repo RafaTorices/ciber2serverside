@@ -89,6 +89,7 @@ comprobarSudoer() {
 
 # Función para mostrar mensaje de error
 mostrarError() {
+    registrarHoraLog
     echo "*** Ha ocurrido un ${COLOR_BOLD}${COLOR_RED}error.${COLOR_RESET} Consulte el archivo de log: ${COLOR_RED}$LOGFILE${COLOR_RESET} para detalles. ***"
 }
 
@@ -125,5 +126,15 @@ instalarDialog() {
     else
         registrarHoraLog
         echo "Paquete dialog instalado con éxito" >>"$LOGFILE"
+    fi
+}
+
+# Función para comprobar si un paquete está instalado
+comprobarPaquete() {
+    local paquete="$1"
+    if dpkg -s "$paquete" 2>/dev/null | grep -q "Status: install ok installed"; then
+        return 0
+    else
+        return 1
     fi
 }
