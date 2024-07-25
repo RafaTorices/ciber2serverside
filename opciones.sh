@@ -1,11 +1,8 @@
 #!/bin/bash
 
-# Función para ejecutar el script1
-ejecutar_script1() {
-    echo "Ejecutando script1..."
-    # Aquí puedes poner el comando para ejecutar tu script1
-    ./script1.sh
-}
+# Script para mostrar opciones al usuario mediante un menú
+# Importamos config.sh
+. ./config.sh
 
 # Bucle para mostrar el menú y obtener la opción del usuario
 while true; do

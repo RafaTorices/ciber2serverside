@@ -14,7 +14,7 @@ while true; do
     clear
     case $opcion in
     1)
-        sh ./lamp.sh
+        sh ./servidor/lamp.sh
         break
         ;;
     2) ejecutar_script2 ;;
