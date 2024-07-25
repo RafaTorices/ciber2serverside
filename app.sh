@@ -1,24 +1,28 @@
 #!/bin/bash
 
-# Script para mostrar las opciones principales
+# App Ciber2ServerSide
 
 # Importamos el script de configuración
 . ./config.sh
-
-# Importamos servidor
+# Importamos resto de scripts necesarios
 . ./servidor.sh
 
-# Comprobamos que el paquete dialog está instalado
+# Comprobamos que el paquete dialog está instalado para poder ejecutar la aplicación
+# Si no está instalado, actualizamos el sistema e instalamos el paquete dialog y lo registramos en el log
 if ! comprobarPaquete dialog; then
-    mostrarCabecera
-    mostrarError
+    registrarHoraLog
     echo "El paquete 'dialog' no está instalado." >>"$LOGFILE"
-    echo "Por favor, instale el paquete 'dialog' para continuar." >>"$LOGFILE"
-    exit 1
+    echo "Actualizamos el sistema e instalamos el paquete 'dialog' para continuar." >>"$LOGFILE"
+    mostrarCabecera
+    echo "${COLOR_CYAN}Configurando la aplicación, por favor espere...${COLOR_RESET}"
+    actualizarSistema
+    instalarDialog
+# Si está instalado, lo registramos en el log y ejecutamos la aplicación
 else
     registrarHoraLog
+    echo "Comprobado que el sistema puede iniciar la aplicación." >>"$LOGFILE"
     echo "El paquete 'dialog' está instalado." >>"$LOGFILE"
-    echo "Se abre el menú de opciones." >>"$LOGFILE"
+    echo "Se ejecuta la aplicación correctamente" >>"$LOGFILE"
 fi
 
 # Bucle para mostrar el menú y obtener la opción del usuario
@@ -41,8 +45,7 @@ while true; do
     3) ejecutar_script3 ;;
     4) ejecutar_script4 ;;
     5)
-        echo "\n${COLOR_RED}Cerrando${COLOR_RESET} Ciber2 Server Side, espere por favor..."
-        sleep 2
+        echo "\n${COLOR_RED}Cerrando${COLOR_RESET} Ciber2 ServerSide..."
         echo "${COLOR_GREEN}¡Hasta luego!\n${COLOR_RESET}"
         break
         ;;

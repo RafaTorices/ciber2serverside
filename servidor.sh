@@ -1,8 +1,6 @@
 #!/bin/bash
 
 # Función para mostrar las opciones de config del servidor
-# Bucle para mostrar el menú y obtener la opción del usuario
-
 mostrarOpcionesServidor() {
     while true; do
         opcion=$(dialog --clear --title "Ciber2 Server Side" \
@@ -21,7 +19,7 @@ mostrarOpcionesServidor() {
         2) ejecutar_script2 ;;
         3) ejecutar_script3 ;;
         4)
-            sh ./opciones.sh
+            sh ./app.sh
             break
             ;;
         *) echo "Opción inválida. Por favor, intente de nuevo." ;;
