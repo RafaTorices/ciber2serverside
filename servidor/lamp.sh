@@ -4,13 +4,30 @@
 
 # Apache2
 instalarApache2() {
-    registrarHoraLog
-    sudo apt-get install apache22 -y >/dev/null 2>>"$LOGFILE"
-    # Si el código de salida del último comando es distinto de 0, mostramos un mensaje de error por pantalla al usuario
-    if [ $? -ne 0 ]; then
-        mostrarErrorDialog "Error al instalar Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
+    dialog --title "$APP_TITULO" --infobox "Instalando y configurando Apache2, espere..." 10 50
+    sleep 2
+    if comprobarPaquete apache2 0 && comprobarServicio apache2 0; then
+        mostrarOKDialog "Apache2 ya está configurado y funcionando en este servidor, cancelamos la instalación."
+        registrarHoraLog
+        echo "Apache2 ya está configurado y funcionando en este servidor, cancelamos la instalación." >>"$LOGFILE"
+        return
     else
         registrarHoraLog
-        echo "Paquete Apache2 instalado con éxito" >>"$LOGFILE"
+        sudo apt-get install apache2 -y >/dev/null 2>>"$LOGFILE"
+        if [ $? -ne 0 ]; then
+            mostrarErrorDialog "Error al configurar Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
+        else
+            registrarHoraLog
+            echo "Paquete Apache2 instalado con éxito." >>"$LOGFILE"
+            levantarServicio apache2
+            if [ $? -ne 0 ]; then
+                mostrarErrorDialog "Error al levantar el servicio Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
+            else
+                registrarHoraLog
+                echo "Servicio Apache2 levantado con éxito." >>"$LOGFILE"
+                echo "Apache2 configurado con éxito." >>"$LOGFILE"
+                mostrarOKDialog "Apache2 configurado con éxito."
+            fi
+        fi
     fi
 }

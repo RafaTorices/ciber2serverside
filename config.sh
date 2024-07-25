@@ -101,6 +101,25 @@ mostrarErrorDialog() {
 
 mostrarOKDialog() {
     local ok_message="$1"
-    dialog --title $APP_TITULO --msgbox "$ok_message" 10 50
+    dialog --title "$APP_TITULO" --msgbox "$ok_message" 10 50
     clear
+}
+
+comprobarServicio() {
+    local servicio="$1"
+    if systemctl is-active --quiet "$servicio"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+levantarServicio() {
+    local servicio="$1"
+    sudo systemctl start "$servicio" >/dev/null 2>>"$LOGFILE"
+    if [ $? -eq 0 ]; then
+        return 0
+    else
+        return 1
+    fi
 }
