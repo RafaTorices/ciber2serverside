@@ -187,8 +187,11 @@ comprobarServidor() {
                         registrarHoraLog
                         echo "Servicio de Apache2 reiniciado con éxito." >>"$LOGFILE"
                         dialog --title "$APP_TITULO" --msgbox "\nServicio de Apache2 reiniciado con éxito." 10 50
+                        break
                     fi
                 else
+                    registrarHoraLog
+                    echo "El servicio de Apache2 no está corriendo, no se puede reiniciar." >>"$LOGFILE"
                     mostrarErrorDialog "\n\nEl servicio de Apache2 no está corriendo, no se puede reiniciar."
                 fi
             else
@@ -207,8 +210,11 @@ comprobarServidor() {
                         registrarHoraLog
                         echo "Servicio de MySQL reiniciado con éxito." >>"$LOGFILE"
                         dialog --title "$APP_TITULO" --msgbox "\nServicio de MySQL reiniciado con éxito." 10 50
+                        break
                     fi
                 else
+                    registrarHoraLog
+                    echo "El servicio de MySQL no está corriendo, no se puede reiniciar." >>"$LOGFILE"
                     mostrarErrorDialog "\n\nEl servicio de MySQL no está corriendo, no se puede reiniciar."
                 fi
             else
@@ -217,9 +223,9 @@ comprobarServidor() {
             ;;
         3)
             dialog --title "$APP_TITULO" --msgbox "\nVersiones de PHP disponibles:\n$php_versions\n\nExtensiones habilitadas de PHP:\n$extensions" 20 50
+            break
             ;;
         4)
-            sh ../servidor.sh
             break
             ;;
         *) echo "Opción inválida. Por favor, intente de nuevo." ;;
@@ -385,6 +391,8 @@ instalarPhpMyAdmin() {
                 fi
             fi
         else
+            registrarHoraLog
+            echo "Error al instalar phpMyAdmin, compruebe que Apache2 y PHP están instalados en su servidor." >>"$LOGFILE"
             dialog --title "$APP_TITULO" --msgbox "\n\nError al instalar phpMyAdmin, compruebe que Apache2 y PHP están instalados en su servidor." 10 50
         fi
     else
