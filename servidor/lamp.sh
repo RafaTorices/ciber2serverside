@@ -176,16 +176,20 @@ comprobarServidor() {
         clear
         case $opcion in
         1)
-            dialog --title "$APP_TITULO" --yesno "\n$apache2_status\n\n$apache2_version\n\n$apache2_servicio\n\nMódulos habilitados Apache2:\n$modules\n\n***¿Reiniciar el servicio?***" 20 50
+            dialog --title "$APP_TITULO" --yesno "\n$apache2_status\n\n$apache2_version\n\n$apache2_servicio\n\nMódulos habilitados Apache2:\n$modules\n\n***¿Reiniciar el servicio?***\n" 20 50
             respuesta=$?
             if [ $respuesta -eq 0 ]; then
-                reiniciarServicio apache2 >/dev/null 2>>"$LOGFILE"
-                if [ $? -ne 0 ]; then
-                    mostrarErrorDialog "\n\nError al reiniciar Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
+                if comprobarServicio apache2 0; then
+                    reiniciarServicio apache2 >/dev/null 2>>"$LOGFILE"
+                    if [ $? -ne 0 ]; then
+                        mostrarErrorDialog "\n\nError al reiniciar Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
+                    else
+                        registrarHoraLog
+                        echo "Servicio de Apache2 reiniciado con éxito." >>"$LOGFILE"
+                        dialog --title "$APP_TITULO" --msgbox "\nServicio de Apache2 reiniciado con éxito." 10 50
+                    fi
                 else
-                    registrarHoraLog
-                    echo "Servicio de Apache2 reiniciado con éxito." >>"$LOGFILE"
-                    dialog --title "$APP_TITULO" --msgbox "\nServicio de Apache2 reiniciado con éxito." 10 50
+                    mostrarErrorDialog "\n\nEl servicio de Apache2 no está corriendo, no se puede reiniciar."
                 fi
             else
                 break
@@ -195,13 +199,17 @@ comprobarServidor() {
             dialog --title "$APP_TITULO" --yesno "\n$mysql_status\n\n$cleaned_version\n\n$mysql_servicio\n\n***¿Reiniciar el servicio?***" 20 50
             respuesta=$?
             if [ $respuesta -eq 0 ]; then
-                reiniciarServicio mysql >/dev/null 2>>"$LOGFILE"
-                if [ $? -ne 0 ]; then
-                    mostrarErrorDialog "\n\nError al reiniciar MySQL, compruebe el archivo de log: $LOGFILE para más detalles."
+                if comprobarServicio mysql 0; then
+                    reiniciarServicio mysql >/dev/null 2>>"$LOGFILE"
+                    if [ $? -ne 0 ]; then
+                        mostrarErrorDialog "\n\nError al reiniciar MySQL, compruebe el archivo de log: $LOGFILE para más detalles."
+                    else
+                        registrarHoraLog
+                        echo "Servicio de MySQL reiniciado con éxito." >>"$LOGFILE"
+                        dialog --title "$APP_TITULO" --msgbox "\nServicio de MySQL reiniciado con éxito." 10 50
+                    fi
                 else
-                    registrarHoraLog
-                    echo "Servicio de MySQL reiniciado con éxito." >>"$LOGFILE"
-                    dialog --title "$APP_TITULO" --msgbox "\nServicio de MySQL reiniciado con éxito." 10 50
+                    mostrarErrorDialog "\n\nEl servicio de MySQL no está corriendo, no se puede reiniciar."
                 fi
             else
                 break
@@ -244,8 +252,14 @@ desinstalarApache2() {
         }
     else
         {
-            instalarApache2
-            levantarServicio apache2
+            dialog --title "$APP_TITULO" --yesno "\nAtención!!\nContinuar con la instalación y configuración de Apache2 en su servidor?" 10 50
+            respuesta=$?
+            if [ $respuesta -eq 0 ]; then
+                instalarApache2
+                levantarServicio apache2
+            else
+                dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
+            fi
         }
     fi
     if comprobarServicio apache2 0; then
@@ -270,7 +284,7 @@ desinstalarMySQL8() {
                 fi
                 instalarMySQL8
                 levantarServicio mysql
-                establecerPasswordRootMy
+                establecerPasswordRootMySQL
             else
                 levantarServicio mysql
                 dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
@@ -283,7 +297,7 @@ desinstalarMySQL8() {
             if [ $respuesta -eq 0 ]; then
                 instalarMySQL8
                 levantarServicio mysql
-                establecerPasswordRootMy
+                establecerPasswordRootMySQL
             else
                 dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
             fi
@@ -326,17 +340,22 @@ resumenServidor() {
 }
 
 # Función para establecer el password del root de MySQL
-establecerPasswordRootMy() {
+establecerPasswordRootMySQL() {
     root_password=$(dialog --title "$APP_TITULO" --passwordbox "\nPor favor, introduzca un nuevo password para el usuario root:\n(Tenga en cuenta que los caracteres no serán visibles en la pantalla)" 10 50 3>&1 1>&2 2>&3)
-    registrarHoraLog
-    sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$root_password'; FLUSH PRIVILEGES;" >/dev/null 2>>"$LOGFILE"
-    if [ $? -ne 0 ]; then
-        mostrarErrorDialog "\n\nError al establecer la contraseña de MySQL, compruebe el archivo de log: $LOGFILE para más detalles."
+    if [ -z "$root_password" ]; then
+        mostrarErrorDialog "\n\nNo se ha introducido ninguna contraseña, por favor, inténtelo de nuevo."
+        establecerPasswordRootMySQL
     else
         registrarHoraLog
-        echo "Contraseña de MySQL establecida correctamente." >>"$LOGFILE"
-        dialog --title "$APP_TITULO" --infobox "\nContraseña de MySQL establecida correctamente, recuérdela, la necesitará para acceder a sus bases de datos.\nEspere para continuar con la instalación..." 10 50
-        sleep 3
+        sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$root_password'; FLUSH PRIVILEGES;" >/dev/null 2>>"$LOGFILE"
+        if [ $? -ne 0 ]; then
+            mostrarErrorDialog "\n\nError al establecer la contraseña de MySQL, compruebe el archivo de log: $LOGFILE para más detalles."
+        else
+            registrarHoraLog
+            echo "Contraseña de MySQL establecida correctamente." >>"$LOGFILE"
+            dialog --title "$APP_TITULO" --infobox "\nContraseña de MySQL establecida correctamente, recuérdela, la necesitará para acceder a sus bases de datos.\nEspere para continuar con la instalación..." 10 50
+            sleep 5
+        fi
     fi
 }
 
