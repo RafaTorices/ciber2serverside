@@ -295,24 +295,34 @@ establecerPasswordRootMy() {
 
 # Función para instalar phpmyadmin
 instalarPhpMyAdmin() {
-    dialog --title "$APP_TITULO" --infobox "\n\nInstalando y configurando phpMyAdmin, espere..." 10 50
-    sleep 2
-    registrarHoraLog
-    sudo apt-get install phpmyadmin -y >/dev/null 2>>"$LOGFILE"
-    if [ $? -ne 0 ]; then
-        mostrarErrorDialog "\n\nError al instalar phpMyAdmin, compruebe el archivo de log: $LOGFILE para más detalles."
-    else
-        registrarHoraLog
-        echo "Paquete phpMyAdmin instalado con éxito." >>"$LOGFILE"
-        reiniciarServicio apache2
-        if [ $? -ne 0 ]; then
-            mostrarErrorDialog "\n\nError al levantar el servicio Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
-        else
+    dialog --title "$APP_TITULO" --yesno "\nAtención!!\nContinuar con la instalación y configuración de PHP8x en su servidor?" 10 50
+    respuesta=$?
+    if [ $respuesta -eq 0 ]; then
+        dialog --title "$APP_TITULO" --infobox "\n\nInstalando y configurando phpMyAdmin, espere..." 10 50
+        sleep 2
+        if (comprobarPaquete apache2 0 && buscarPaquetesPHPInstalados 0); then
             registrarHoraLog
-            echo "Servicio Apache2 levantado con éxito." >>"$LOGFILE"
-            echo "phpMyAdmin configurado con éxito." >>"$LOGFILE"
-            mostrarOKDialog "\n\nphpMyAdmin configurado con éxito."
+            sudo apt-get install phpmyadmin -y >/dev/null 2>>"$LOGFILE"
+            if [ $? -ne 0 ]; then
+                mostrarErrorDialog "\n\nError al instalar phpMyAdmin, compruebe el archivo de log: $LOGFILE para más detalles."
+            else
+                registrarHoraLog
+                echo "Paquete phpMyAdmin instalado con éxito." >>"$LOGFILE"
+                reiniciarServicio apache2
+                if [ $? -ne 0 ]; then
+                    mostrarErrorDialog "\n\nError al levantar el servicio Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
+                else
+                    registrarHoraLog
+                    echo "Servicio Apache2 levantado con éxito." >>"$LOGFILE"
+                    echo "phpMyAdmin configurado con éxito." >>"$LOGFILE"
+                    mostrarOKDialog "\n\nphpMyAdmin configurado con éxito."
+                fi
+            fi
+        else
+            dialog --title "$APP_TITULO" --msgbox "\n\nError al instalar phpMyAdmin, compruebe que Apache2 y PHP están instalados en su servidor." 10 50
         fi
+    else
+        dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
     fi
 }
 # Función para desinstalar phpmyadmin

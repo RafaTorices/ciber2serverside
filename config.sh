@@ -137,3 +137,14 @@ reiniciarServicio() {
 opcionNoDisponible() {
     mostrarErrorDialog "\nOpción no disponible en este momento.\nPróximamente se implementará esta funcionalidad."
 }
+
+buscarPaquetesPHPInstalados() {
+    # Buscar paquetes de PHP instalados
+    php_versions=$(dpkg -l | grep php | grep -Eo 'php[0-9.]+')
+    # Verificar si se encontró alguna versión de PHP
+    if [ -n "$php_versions" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
