@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Import de las funciones
-. ./servidor/lamp8x.sh
+. ./servidor/lamp.sh
 
 # Función para mostrar las opciones de config del servidor
 mostrarOpcionesServidor() {
@@ -9,11 +9,10 @@ mostrarOpcionesServidor() {
         opcion=$(dialog --clear --title "$APP_TITULO" \
             --menu "\nSeleccione el entorno a configurar:" 15 50 4 \
             1 "Comprobar configuración de LAMP" \
-            2 "LAMP(Apache2.2-MySQL8.0-PHP8.x)" \
-            3 "LAMP(Apache2.2-MySQL5.7-PHP7.x)" \
-            4 "phpMyAdmin" \
-            5 "Entorno DOCKER" \
-            6 "Volver al menú principal" \
+            2 "LAMP(Apache-MySQL-PHP)" \
+            3 "phpMyAdmin" \
+            4 "Entorno DOCKER" \
+            5 "Volver al menú principal" \
             3>&1 1>&2 2>&3)
         clear
         case $opcion in
@@ -38,11 +37,9 @@ mostrarOpcionesServidor() {
                 dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
             fi
             ;;
-        2) opcionNoDisponible ;;
-        3) opcionNoDisponible ;;
-        4) desinstalarPhpMyAdmin ;;
-        5) opcionNoDisponible ;;
-        6)
+        3) desinstalarPhpMyAdmin ;;
+        4) opcionNoDisponible ;;
+        5)
             sh ./app.sh
             break
             ;;
