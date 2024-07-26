@@ -124,6 +124,16 @@ levantarServicio() {
     fi
 }
 
+reiniciarServicio() {
+    local servicio="$1"
+    sudo systemctl restart "$servicio" >/dev/null 2>>"$LOGFILE"
+    if [ $? -eq 0 ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 opcionNoDisponible() {
     mostrarErrorDialog "\nOpción no disponible en este momento.\nPróximamente se implementará esta funcionalidad."
 }

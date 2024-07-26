@@ -11,8 +11,9 @@ mostrarOpcionesServidor() {
             1 "Comprobar configuración de LAMP" \
             2 "LAMP(Apache2.2-MySQL8.0-PHP8.x)" \
             3 "LAMP(Apache2.2-MySQL5.7-PHP7.x)" \
-            4 "Entorno Docker" \
-            5 "Volver al menú principal" \
+            4 "phpMyAdmin" \
+            5 "Entorno DOCKER" \
+            6 "Volver al menú principal" \
             3>&1 1>&2 2>&3)
         clear
         case $opcion in
@@ -39,8 +40,9 @@ mostrarOpcionesServidor() {
             ;;
         2) opcionNoDisponible ;;
         3) opcionNoDisponible ;;
-        4) opcionNoDisponible ;;
-        5)
+        4) desinstalarPhpMyAdmin ;;
+        5) opcionNoDisponible ;;
+        6)
             sh ./app.sh
             break
             ;;

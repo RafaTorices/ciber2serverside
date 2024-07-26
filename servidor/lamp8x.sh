@@ -223,6 +223,7 @@ desinstalarMySQL8() {
                 fi
                 instalarMySQL8
                 levantarServicio mysql
+                establecerPasswordRootMy
             else
                 levantarServicio mysql
                 dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
@@ -235,6 +236,7 @@ desinstalarMySQL8() {
             if [ $respuesta -eq 0 ]; then
                 instalarMySQL8
                 levantarServicio mysql
+                establecerPasswordRootMy
             else
                 dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
             fi
@@ -274,4 +276,68 @@ resumenServidor() {
         php_versions=$(echo "$php_versions" | sort | uniq | tr '\n' ' ')
     fi
     dialog --title "$APP_TITULO" --msgbox "\nConfiguración actual de su servidor:\n\n$apache2_status\n$apache2_servicio\n\n$mysql_status\n$mysql_servicio\n\nVersiones de PHP disponibles:\n$php_versions" 20 50
+}
+
+# Función para establecer el password del root de MySQL
+establecerPasswordRootMy() {
+    root_password=$(dialog --title "$APP_TITULO" --passwordbox "\nPor favor, introduzca un nuevo password para el usuario root:\n(Tenga en cuenta que los caracteres no serán visibles en la pantalla)" 10 50 3>&1 1>&2 2>&3)
+    registrarHoraLog
+    sudo mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '$root_password'; FLUSH PRIVILEGES;" >/dev/null 2>>"$LOGFILE"
+    if [ $? -ne 0 ]; then
+        mostrarErrorDialog "\n\nError al establecer la contraseña de MySQL, compruebe el archivo de log: $LOGFILE para más detalles."
+    else
+        registrarHoraLog
+        echo "Contraseña de MySQL establecida correctamente." >>"$LOGFILE"
+        dialog --title "$APP_TITULO" --infobox "\nContraseña de MySQL establecida correctamente, recuérdela, la necesitará para acceder a sus bases de datos.\nEspere para continuar con la instalación..." 10 50
+        sleep 3
+    fi
+}
+
+# Función para instalar phpmyadmin
+instalarPhpMyAdmin() {
+    dialog --title "$APP_TITULO" --infobox "\n\nInstalando y configurando phpMyAdmin, espere..." 10 50
+    sleep 2
+    registrarHoraLog
+    sudo apt-get install phpmyadmin -y >/dev/null 2>>"$LOGFILE"
+    if [ $? -ne 0 ]; then
+        mostrarErrorDialog "\n\nError al instalar phpMyAdmin, compruebe el archivo de log: $LOGFILE para más detalles."
+    else
+        registrarHoraLog
+        echo "Paquete phpMyAdmin instalado con éxito." >>"$LOGFILE"
+        reiniciarServicio apache2
+        if [ $? -ne 0 ]; then
+            mostrarErrorDialog "\n\nError al levantar el servicio Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
+        else
+            registrarHoraLog
+            echo "Servicio Apache2 levantado con éxito." >>"$LOGFILE"
+            echo "phpMyAdmin configurado con éxito." >>"$LOGFILE"
+            mostrarOKDialog "\n\nphpMyAdmin configurado con éxito."
+        fi
+    fi
+}
+# Función para desinstalar phpmyadmin
+desinstalarPhpMyAdmin() {
+    if comprobarPaquete phpmyadmin 0; then
+        {
+            dialog --title "$APP_TITULO" --yesno "\nInstalación de phpMyAdmin\nSe ha detectado que phpMyAdmin ya está instalado en este servidor,\n¿desea continuar con la instalación?\n(Esta acción eliminará su paquete actual y reinstalará phpMyAdmin, puede causar pérdida de datos)\nDesea continuar?" 13 50
+            respuesta=$?
+            if [ $respuesta -eq 0 ]; then
+                registrarHoraLog
+                sudo apt-get remove phpmyadmin -y >/dev/null 2>>"$LOGFILE"
+                if [ $? -ne 0 ]; then
+                    mostrarErrorDialog "\n\nError al desinstalar phpMyAdmin, compruebe el archivo de log: $LOGFILE para más detalles."
+                else
+                    registrarHoraLog
+                    echo "Paquete phpMyAdmin desinstalado con éxito." >>"$LOGFILE"
+                fi
+                instalarPhpMyAdmin
+            else
+                dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
+            fi
+        }
+    else
+        {
+            instalarPhpMyAdmin
+        }
+    fi
 }
