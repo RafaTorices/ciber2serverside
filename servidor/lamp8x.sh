@@ -147,9 +147,9 @@ comprobarServidor() {
     while true; do
         opcion=$(dialog --clear --title "$APP_TITULO" \
             --menu "\nConfiguración actual de su servidor:" 15 50 4 \
-            1 "Apache2" \
-            2 "MySQL8.0" \
-            3 "PHP8.x" \
+            1 "Apache" \
+            2 "MySQL" \
+            3 "PHP" \
             4 "Volver atrás" \
             3>&1 1>&2 2>&3)
         clear
@@ -230,8 +230,14 @@ desinstalarMySQL8() {
         }
     else
         {
-            instalarMySQL8
-            levantarServicio mysql
+            dialog --title "$APP_TITULO" --yesno "\nAtención!!\nContinuar con la instalación y configuración de MySQL8x en su servidor?" 10 50
+            respuesta=$?
+            if [ $respuesta -eq 0 ]; then
+                instalarMySQL8
+                levantarServicio mysql
+            else
+                dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
+            fi
         }
     fi
     if comprobarServicio mysql 0; then
