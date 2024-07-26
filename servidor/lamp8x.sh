@@ -295,7 +295,7 @@ establecerPasswordRootMy() {
 
 # Función para instalar phpmyadmin
 instalarPhpMyAdmin() {
-    dialog --title "$APP_TITULO" --yesno "\nAtención!!\nContinuar con la instalación y configuración de PHP8x en su servidor?" 10 50
+    dialog --title "$APP_TITULO" --yesno "\nAtención!!\nContinuar con la instalación y configuración de phpMyAdmin en su servidor?" 10 50
     respuesta=$?
     if [ $respuesta -eq 0 ]; then
         dialog --title "$APP_TITULO" --infobox "\n\nInstalando y configurando phpMyAdmin, espere..." 10 50
