@@ -6,65 +6,51 @@
 instalarApache2() {
     dialog --title "$APP_TITULO" --infobox "Instalando y configurando Apache2, espere..." 10 50
     sleep 2
-    if comprobarPaquete apache2 0 && comprobarServicio apache2 0; then
-        mostrarOKDialog "Apache2 ya está configurado y funcionando en este servidor, cancelamos la instalación."
-        registrarHoraLog
-        echo "Apache2 ya está configurado y funcionando en este servidor, cancelamos la instalación." >>"$LOGFILE"
-        return
+    registrarHoraLog
+    sudo apt-get install apache2 -y >/dev/null 2>>"$LOGFILE"
+    if [ $? -ne 0 ]; then
+        mostrarErrorDialog "Error al configurar Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
     else
         registrarHoraLog
-        sudo apt-get install apache2 -y >/dev/null 2>>"$LOGFILE"
+        echo "Paquete Apache2 instalado con éxito." >>"$LOGFILE"
+        levantarServicio apache2
         if [ $? -ne 0 ]; then
-            mostrarErrorDialog "Error al configurar Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
+            mostrarErrorDialog "Error al levantar el servicio Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
         else
             registrarHoraLog
-            echo "Paquete Apache2 instalado con éxito." >>"$LOGFILE"
-            levantarServicio apache2
-            if [ $? -ne 0 ]; then
-                mostrarErrorDialog "Error al levantar el servicio Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
-            else
-                registrarHoraLog
-                echo "Servicio Apache2 levantado con éxito." >>"$LOGFILE"
-                echo "Apache2 configurado con éxito." >>"$LOGFILE"
-                mostrarOKDialog "Apache2 configurado con éxito."
-            fi
+            echo "Servicio Apache2 levantado con éxito." >>"$LOGFILE"
+            echo "Apache2 configurado con éxito." >>"$LOGFILE"
+            mostrarOKDialog "Apache2 configurado con éxito."
         fi
     fi
 }
 
 # MySQL Server 8.0
 instalarMySQL8() {
-    dialog --title "$APP_TITULO" --infobox "Instalando y configurando MySQL Server 8.0, espere..." 10 50
+    dialog --title "$APP_TITULO" --infobox "Instalando y configurando MySQL8.0, espere..." 10 50
     sleep 2
-    if comprobarPaquete mysql-server 0 && comprobarServicio mysql 0; then
-        mostrarOKDialog "Ya hay una instancia de MySQL Server configurado y funcionando en este servidor, cancelamos la instalación."
-        registrarHoraLog
-        echo "Ya hay una instancia de MySQL Server configurado y funcionando en este servidor, cancelamos la instalación." >>"$LOGFILE"
-        return
+    registrarHoraLog
+    sudo apt-get install mysql-server -y >/dev/null 2>>"$LOGFILE"
+    if [ $? -ne 0 ]; then
+        mostrarErrorDialog "Error al configurar MySQL8.0, compruebe el archivo de log: $LOGFILE para más detalles."
     else
         registrarHoraLog
-        sudo apt-get install mysql-server -y >/dev/null 2>>"$LOGFILE"
+        echo "Paquete MySQL8.0 instalado con éxito." >>"$LOGFILE"
+        levantarServicio mysql
         if [ $? -ne 0 ]; then
-            mostrarErrorDialog "Error al configurar MySQL Server 8.0, compruebe el archivo de log: $LOGFILE para más detalles."
+            mostrarErrorDialog "Error al levantar el servicio MySQL8.0, compruebe el archivo de log: $LOGFILE para más detalles."
         else
             registrarHoraLog
-            echo "Paquete MySQL Server 8.0 instalado con éxito." >>"$LOGFILE"
-            levantarServicio mysql
-            if [ $? -ne 0 ]; then
-                mostrarErrorDialog "Error al levantar el servicio MySQL Server 8.0, compruebe el archivo de log: $LOGFILE para más detalles."
-            else
-                registrarHoraLog
-                echo "Servicio MySQL Server 8.0 levantado con éxito." >>"$LOGFILE"
-                echo "MySQL Server 8.0 configurado con éxito." >>"$LOGFILE"
-                mostrarOKDialog "MySQL Server 8.0 configurado con éxito."
-            fi
+            echo "Servicio MySQL8.0 levantado con éxito." >>"$LOGFILE"
+            echo "MySQL8.0 configurado con éxito." >>"$LOGFILE"
+            mostrarOKDialog "MySQL8.0 configurado con éxito."
         fi
     fi
 }
 
 # PHP 8.x
 instalarPHP8() {
-    dialog --title "$APP_TITULO" --infobox "Instalando y configurando PHP 8.x, espere..." 10 50
+    dialog --title "$APP_TITULO" --infobox "Instalando y configurando PHP8.x, espere..." 10 50
     sleep 2
     registrarHoraLog
     sudo add-apt-repository ppa:ondrej/apache2 -y >/dev/null 2>>"$LOGFILE"
@@ -86,9 +72,9 @@ instalarPHP8() {
         php8.3-gd php8.3-curl php8.3-mysql php8.3-zip \
         php8.3-xml php8.3-soap php8.3-intl \
         php8.3-mbstring php8.3-bcmath >/dev/null 2>>"$LOGFILE"
-    dialog --title "$APP_TITULO" --msgbox "PHP 8.x instalado con éxito." 10 50
+    dialog --title "$APP_TITULO" --msgbox "PHP8.x instalado con éxito." 10 50
     registrarHoraLog
-    echo "PHP 8.x instalado con éxito." >>"$LOGFILE"
+    echo "PHP8.x instalado con éxito." >>"$LOGFILE"
 }
 
 # Comprobar la configuración actual del servidor
@@ -105,6 +91,11 @@ comprobarServidor() {
     else
         apache2_status="Apache2 NO configurado."
     fi
+    if comprobarServicio apache2 0; then
+        apache2_servicio="Servicio de Apache2 corriendo OK."
+    else
+        apache2_servicio="Servicio de Apache2 detenido."
+    fi
     # Comprobamos si MySQL está instalado
     if comprobarPaquete mysql-server 0; then
         mysql_status="MySQL configurado OK."
@@ -117,6 +108,11 @@ comprobarServidor() {
     else
         mysql_status="MySQL NO configurado."
     fi
+    if comprobarServicio mysql 0; then
+        mysql_servicio="Servicio de MySQL corriendo OK."
+    else
+        mysql_servicio="Servicio de MySQL detenido."
+    fi
     # Comprobamos las versiones de PHP
     php_versions=$(ls /usr/bin/php* 2>/dev/null | grep -oP '(?<=php)[0-9.]+')
     # Si no hay versiones encontradas, muestra un mensaje adecuado
@@ -126,5 +122,71 @@ comprobarServidor() {
         php_versions=$(echo "$php_versions" | sort | uniq | tr '\n' ' ')
     fi
     # Mostramos los resultados en una ventana dialog
-    dialog --title "$APP_TITULO" --msgbox "Configuración actual del servidor:\n\nEstado de Apache2:\n$apache2_status\n$apache2_version\n\nEstado de MySQL:\n$mysql_status\n$cleaned_version\n\nVersiones de PHP:\n$php_versions" 20 50
+    dialog --title "$APP_TITULO" --msgbox "Configuración actual del servidor:\n\nEstado de Apache2:\n$apache2_status\n$apache2_version\n$apache2_servicio\n\nEstado de MySQL:\n$mysql_status\n$cleaned_version\n$mysql_servicio\n\nVersiones de PHP:\n$php_versions" 20 50
+}
+
+# Desinstalar Apache2
+desinstalarApache2() {
+    if comprobarPaquete apache2 0; then
+        {
+            dialog --title "$APP_TITULO" --yesno "Instalación de Apache2\nSe ha detectado que Apache2 ya está instalado en este servidor,\n¿desea continuar con la instalación?\n(Esta acción eliminará su paquete actual y reinstalará Apache2, puede causar pérdida de datos)\nDesea continuar?" 10 50
+            respuesta=$?
+            if [ $respuesta -eq 0 ]; then
+                registrarHoraLog
+                sudo apt-get remove apache2 -y >/dev/null 2>>"$LOGFILE"
+                if [ $? -ne 0 ]; then
+                    mostrarErrorDialog "Error al desinstalar Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
+                else
+                    registrarHoraLog
+                    echo "Paquete Apache2 desinstalado con éxito." >>"$LOGFILE"
+                fi
+                instalarApache2
+                levantarServicio apache2
+            else
+                levantarServicio apache2
+                dialog --title "$APP_TITULO" --msgbox "Operación cancelada, no se han producido cambios en su servidor." 10 50
+            fi
+        }
+    else
+        {
+            instalarApache2
+            levantarServicio apache2
+        }
+    fi
+    if comprobarServicio apache2 0; then
+        levantarServicio apache2
+    fi
+}
+
+# Desinstalar MySQL8
+desinstalarMySQL8() {
+    if comprobarPaquete mysql-server 0; then
+        {
+            dialog --title "$APP_TITULO" --yesno "Instalación de MySQL8.0\nSe ha detectado una instacia de MySQL en este servidor,\n¿desea continuar con la instalación?\n(Esta acción eliminará su paquete actual y reinstalará MySQL8.0, puede causar pérdida de datos)\nDesea continuar?" 10 50
+            respuesta=$?
+            if [ $respuesta -eq 0 ]; then
+                registrarHoraLog
+                sudo apt-get remove mysql-server -y >/dev/null 2>>"$LOGFILE"
+                if [ $? -ne 0 ]; then
+                    mostrarErrorDialog "Error al desinstalar MySQL, compruebe el archivo de log: $LOGFILE para más detalles."
+                else
+                    registrarHoraLog
+                    echo "Paquete MySQL8.0 desinstalado con éxito." >>"$LOGFILE"
+                fi
+                instalarMySQL8
+                levantarServicio mysql
+            else
+                levantarServicio mysql
+                dialog --title "$APP_TITULO" --msgbox "Operación cancelada, no se han producido cambios en su servidor." 10 50
+            fi
+        }
+    else
+        {
+            instalarMySQL8
+            levantarServicio mysql
+        }
+    fi
+    if comprobarServicio mysql 0; then
+        levantarServicio mysql
+    fi
 }
