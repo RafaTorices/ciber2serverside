@@ -28,7 +28,7 @@ fi
 # Bucle para mostrar el menú y obtener la opción del usuario
 while true; do
     opcion=$(dialog --clear --title "$APP_TITULO" \
-        --menu "Seleccione la opción a ejecutar:" 15 50 4 \
+        --menu "\nSeleccione la opción a ejecutar:" 15 50 4 \
         1 "Configuración de Servidor Web" \
         2 "VirtualHost de desarrollo básico" \
         3 "VirtualHost de desarrollo WORDPRESS" \

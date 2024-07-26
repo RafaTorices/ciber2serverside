@@ -7,7 +7,7 @@
 mostrarOpcionesServidor() {
     while true; do
         opcion=$(dialog --clear --title "$APP_TITULO" \
-            --menu "Seleccione el entorno a configurar:" 15 50 4 \
+            --menu "\nSeleccione el entorno a configurar:" 15 50 4 \
             1 "Comprobar configuración de LAMP" \
             2 "LAMP(Apache2.2-MySQL8.0-PHP8.x)" \
             3 "LAMP(Apache2.2-MySQL5.7-PHP7.x)" \
@@ -20,10 +20,10 @@ mostrarOpcionesServidor() {
             comprobarServidor
             ;;
         2)
-            dialog --title "$APP_TITULO" --yesno "Atención!!\nEsta acción instalará y configurará su sistema con las versiones de Apache2.2, MySQL8.0 y PHP8.x.\nEsta acción realizará cambios en su servidor y podrá causar pérdida de datos, está seguro de continuar?" 10 50
+            dialog --title "$APP_TITULO" --yesno "\nAtención!!\nEsta acción instalará y configurará su sistema con las versiones de Apache2.2, MySQL8.0 y PHP8.x.\nEsta acción realizará cambios en su servidor y podrá causar pérdida de datos, está seguro de continuar?" 13 50
             respuesta=$?
             if [ $respuesta -eq 0 ]; then
-                dialog --title "$APP_TITULO" --yesno "Confirme su decisión, desea continuar con la instalación?" 10 50
+                dialog --title "$APP_TITULO" --yesno "\nConfirme su decisión, desea continuar con la instalación?" 10 50
                 segunda_respuesta=$?
                 if [ $segunda_respuesta -eq 0 ]; then
                     desinstalarApache2
@@ -31,10 +31,10 @@ mostrarOpcionesServidor() {
                     instalarPHP8
                     comprobarServidor
                 else
-                    dialog --title "$APP_TITULO" --msgbox "Operación cancelada, no se han producido cambios en su servidor." 10 50
+                    dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
                 fi
             else
-                dialog --title "$APP_TITULO" --msgbox "Operación cancelada, no se han producido cambios en su servidor." 10 50
+                dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
             fi
             ;;
         2) ejecutar_script2 ;;
@@ -43,7 +43,7 @@ mostrarOpcionesServidor() {
             sh ./app.sh
             break
             ;;
-        *) echo "Opción inválida. Por favor, intente de nuevo." ;;
+        *) echo "\nOpción inválida. Por favor, intente de nuevo." ;;
         esac
         echo ""
     done
