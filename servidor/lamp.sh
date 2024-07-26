@@ -50,10 +50,10 @@ instalarMySQL8() {
 
 # PHP 8.x
 instalarPHP8() {
-    dialog --title "$APP_TITULO" --yesno "\nAtención!!\nContinuar con la instalación y configuración de PHP8x en su servidor?" 10 50
+    dialog --title "$APP_TITULO" --yesno "\nAtención!!\nContinuar con la instalación y configuración de PHP en su servidor?" 10 50
     respuesta=$?
     if [ $respuesta -eq 0 ]; then
-        dialog --title "$APP_TITULO" --infobox "\n\nInstalando y configurando PHP8.x, espere..." 10 50
+        dialog --title "$APP_TITULO" --infobox "\n\nInstalando y configurando PHP, espere..." 10 50
         sleep 2
         registrarHoraLog
         sudo add-apt-repository ppa:ondrej/apache2 -y >/dev/null 2>>"$LOGFILE"
@@ -75,9 +75,30 @@ instalarPHP8() {
             php8.3-gd php8.3-curl php8.3-mysql php8.3-zip \
             php8.3-xml php8.3-soap php8.3-intl \
             php8.3-mbstring php8.3-bcmath >/dev/null 2>>"$LOGFILE"
-        dialog --title "$APP_TITULO" --msgbox "\n\nPHP8.x instalado con éxito." 10 50
+        sudo apt install -y -qq php7.0 php7.0-mcrypt \
+            php7.0-gd php7.0-curl php7.0-mysql php7.0-zip \
+            php7.0-xml php7.0-soap php7.0-intl \
+            php7.0-mbstring php7.0-bcmath >/dev/null 2>>"$LOGFILE"
+        sudo apt install -y -qq php7.1 php7.1-mcrypt \
+            php7.1-gd php7.1-curl php7.1-mysql php7.1-zip \
+            php7.1-xml php7.1-soap php7.1-intl \
+            php7.1-mbstring php7.1-bcmath >/dev/null 2>>"$LOGFILE"
+        sudo apt install -y -qq php7.2 php7.2-mcrypt \
+            php7.2-gd php7.2-curl php7.2-mysql php7.2-zip \
+            php7.2-xml php7.2-soap php7.2-intl \
+            php7.2-mbstring php7.2-bcmath >/dev/null 2>>"$LOGFILE"
+        sudo apt install -y -qq php7.3 php7.3-mcrypt \
+            php7.3-gd php7.3-curl php7.3-mysql php7.3-zip \
+            php7.3-xml php7.3-soap php7.3-intl \
+            php7.3-mbstring php7.3-bcmath >/dev/null 2>>"$LOGFILE"
+        sudo apt install -y -qq php7.4 php7.4-mcrypt \
+            php7.4-gd php7.4-curl php7.4-mysql php7.4-zip \
+            php7.4-xml php7.4-soap php7.4-intl \
+            php7.4-mbstring php7.4-bcmath >/dev/null 2>>"$LOGFILE"
+
+        dialog --title "$APP_TITULO" --msgbox "\n\nPHP instalado con éxito." 10 50
         registrarHoraLog
-        echo "PHP8.x instalado con éxito." >>"$LOGFILE"
+        echo "PHP instalado con éxito." >>"$LOGFILE"
     else
         dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
     fi

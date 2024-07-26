@@ -20,7 +20,7 @@ mostrarOpcionesServidor() {
             comprobarServidor
             ;;
         2)
-            dialog --title "$APP_TITULO" --yesno "\nAtención!!\nEsta acción instalará y configurará su sistema con las versiones de Apache2.2, MySQL8.0 y PHP8.x.\nEsta acción realizará cambios en su servidor y podrá causar pérdida de datos, está seguro de continuar?" 13 50
+            dialog --title "$APP_TITULO" --yesno "\nAtención!!\nEsta acción instalará y configurará su sistema con las versiones de Apache2.2, MySQL8.0, PHP7.x y PHP8.x.\nEsta acción realizará cambios en su servidor y podrá causar pérdida de datos, está seguro de continuar?" 13 50
             respuesta=$?
             if [ $respuesta -eq 0 ]; then
                 dialog --title "$APP_TITULO" --yesno "\nConfirme su decisión, desea continuar con la instalación?" 10 50
