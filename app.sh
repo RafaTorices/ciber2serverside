@@ -41,9 +41,9 @@ while true; do
         mostrarOpcionesServidor
         break
         ;;
-    2) ejecutar_script2 ;;
-    3) ejecutar_script3 ;;
-    4) ejecutar_script4 ;;
+    2) opcionNoDisponible ;;
+    3) opcionNoDisponible ;;
+    4) opcionNoDisponible ;;
     5)
         echo "\n${COLOR_RED}Cerrando${COLOR_RESET} $APP_TITULO..."
         echo "${COLOR_GREEN}¡Hasta luego!\n${COLOR_RESET}"

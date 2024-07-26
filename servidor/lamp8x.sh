@@ -144,7 +144,33 @@ comprobarServidor() {
         extensions=$(echo "$extensions" | tr '\n' ' ')
     fi
     # Mostramos los resultados en una ventana dialog
-    dialog --title "$APP_TITULO" --msgbox "\nConfiguración actual del servidor:\n\nEstado de Apache2:\n$apache2_status\n$apache2_version\n$apache2_servicio\nMódulos habilitados Apache2:\n$modules\n\nEstado de MySQL:\n$mysql_status\n$cleaned_version\n$mysql_servicio\n\nVersiones de PHP:\n$php_versions\nExtensiones habilitadas de PHP:\n$extensions" 20 50
+    while true; do
+        opcion=$(dialog --clear --title "$APP_TITULO" \
+            --menu "\nConfiguración actual de su servidor:" 15 50 4 \
+            1 "Apache2" \
+            2 "MySQL8.0" \
+            3 "PHP8.x" \
+            4 "Volver atrás" \
+            3>&1 1>&2 2>&3)
+        clear
+        case $opcion in
+        1)
+            dialog --title "$APP_TITULO" --msgbox "\n$apache2_status\n\n$apache2_version\n\n$apache2_servicio\n\nMódulos habilitados Apache2:\n$modules" 20 50
+            ;;
+        2)
+            dialog --title "$APP_TITULO" --msgbox "\n$mysql_status\n\n$cleaned_version\n\n$mysql_servicio" 20 50
+            ;;
+        3)
+            dialog --title "$APP_TITULO" --msgbox "\nVersiones de PHP disponibles:\n$php_versions\n\nExtensiones habilitadas de PHP:\n$extensions" 20 50
+            ;;
+        4)
+            sh ../servidor.sh
+            break
+            ;;
+        *) echo "Opción inválida. Por favor, intente de nuevo." ;;
+        esac
+        echo ""
+    done
 }
 
 # Desinstalar Apache2
@@ -211,4 +237,35 @@ desinstalarMySQL8() {
     if comprobarServicio mysql 0; then
         levantarServicio mysql
     fi
+}
+
+# Función para resumir la configuración del servidor
+resumenServidor() {
+    if comprobarPaquete apache2 0; then
+        apache2_status="Apache2 configurado OK."
+    else
+        apache2_status="Apache2 NO configurado."
+    fi
+    if comprobarServicio apache2 0; then
+        apache2_servicio="Servicio de Apache2 corriendo OK."
+    else
+        apache2_servicio="Servicio de Apache2 detenido."
+    fi
+    if comprobarPaquete mysql-server 0; then
+        mysql_status="MySQL configurado OK."
+    else
+        mysql_status="MySQL NO configurado."
+    fi
+    if comprobarServicio mysql 0; then
+        mysql_servicio="Servicio de MySQL corriendo OK."
+    else
+        mysql_servicio="Servicio de MySQL detenido."
+    fi
+    php_versions=$(ls /usr/bin/php* 2>/dev/null | grep -oP '(?<=php)[0-9.]+')
+    if [ -z "$php_versions" ]; then
+        php_versions="No se encontraron versiones de PHP configuradas en el servidor."
+    else
+        php_versions=$(echo "$php_versions" | sort | uniq | tr '\n' ' ')
+    fi
+    dialog --title "$APP_TITULO" --msgbox "\nConfiguración actual de su servidor:\n\n$apache2_status\n$apache2_servicio\n\n$mysql_status\n$mysql_servicio\n\nVersiones de PHP disponibles:\n$php_versions" 20 50
 }

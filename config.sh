@@ -123,3 +123,7 @@ levantarServicio() {
         return 1
     fi
 }
+
+opcionNoDisponible() {
+    mostrarErrorDialog "\nOpción no disponible en este momento.\nPróximamente se implementará esta funcionalidad."
+}

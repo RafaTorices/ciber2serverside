@@ -29,7 +29,7 @@ mostrarOpcionesServidor() {
                     desinstalarApache2
                     desinstalarMySQL8
                     instalarPHP8
-                    comprobarServidor
+                    resumenServidor
                 else
                     dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
                 fi
@@ -37,8 +37,9 @@ mostrarOpcionesServidor() {
                 dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
             fi
             ;;
-        2) ejecutar_script2 ;;
-        3) ejecutar_script3 ;;
+        2) opcionNoDisponible ;;
+        3) opcionNoDisponible ;;
+        4) opcionNoDisponible ;;
         5)
             sh ./app.sh
             break
