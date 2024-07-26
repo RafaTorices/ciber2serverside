@@ -176,10 +176,36 @@ comprobarServidor() {
         clear
         case $opcion in
         1)
-            dialog --title "$APP_TITULO" --msgbox "\n$apache2_status\n\n$apache2_version\n\n$apache2_servicio\n\nMódulos habilitados Apache2:\n$modules" 20 50
+            dialog --title "$APP_TITULO" --yesno "\n$apache2_status\n\n$apache2_version\n\n$apache2_servicio\n\nMódulos habilitados Apache2:\n$modules\n\n***¿Reiniciar el servicio?***" 20 50
+            respuesta=$?
+            if [ $respuesta -eq 0 ]; then
+                reiniciarServicio apache2 >/dev/null 2>>"$LOGFILE"
+                if [ $? -ne 0 ]; then
+                    mostrarErrorDialog "\n\nError al reiniciar Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
+                else
+                    registrarHoraLog
+                    echo "Servicio de Apache2 reiniciado con éxito." >>"$LOGFILE"
+                    dialog --title "$APP_TITULO" --msgbox "\nServicio de Apache2 reiniciado con éxito." 10 50
+                fi
+            else
+                break
+            fi
             ;;
         2)
-            dialog --title "$APP_TITULO" --msgbox "\n$mysql_status\n\n$cleaned_version\n\n$mysql_servicio" 20 50
+            dialog --title "$APP_TITULO" --yesno "\n$mysql_status\n\n$cleaned_version\n\n$mysql_servicio\n\n***¿Reiniciar el servicio?***" 20 50
+            respuesta=$?
+            if [ $respuesta -eq 0 ]; then
+                reiniciarServicio mysql >/dev/null 2>>"$LOGFILE"
+                if [ $? -ne 0 ]; then
+                    mostrarErrorDialog "\n\nError al reiniciar MySQL, compruebe el archivo de log: $LOGFILE para más detalles."
+                else
+                    registrarHoraLog
+                    echo "Servicio de MySQL reiniciado con éxito." >>"$LOGFILE"
+                    dialog --title "$APP_TITULO" --msgbox "\nServicio de MySQL reiniciado con éxito." 10 50
+                fi
+            else
+                break
+            fi
             ;;
         3)
             dialog --title "$APP_TITULO" --msgbox "\nVersiones de PHP disponibles:\n$php_versions\n\nExtensiones habilitadas de PHP:\n$extensions" 20 50

@@ -10,7 +10,7 @@ mostrarOpcionesServidor() {
             --menu "\nSeleccione el entorno a configurar:" 15 50 4 \
             1 "Comprobar configuración de LAMP" \
             2 "LAMP(Apache-MySQL-PHP)" \
-            3 "phpMyAdmin" \
+            3 "Instalar phpMyAdmin" \
             4 "Entorno DOCKER" \
             5 "Volver al menú principal" \
             3>&1 1>&2 2>&3)
