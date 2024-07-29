@@ -42,7 +42,16 @@ mostrarOpcionesServidor() {
             ;;
         3) desinstalarPhpMyAdmin ;;
         4) mostrarOpcionesUtilidades ;;
-        5) instalar_docker ;;
+        5)
+            # Mostramos ventana dialog de instalación
+            dialog --title "$APP_TITULO" --defaultno --yesno "\nAtención!!\nEsta acción instalará Docker en su sistema.\nEsta acción realizará cambios en su servidor y podrá causar pérdida de datos, está seguro de continuar?" 13 50
+            respuesta=$?
+            if [ $respuesta -eq 0 ]; then
+                instalarDocker
+            else
+                dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
+            fi
+            ;;
         0)
             sh ./app.sh
             break
