@@ -49,6 +49,8 @@ while true; do
     0)
         echo "\n${COLOR_RED}Cerrando${COLOR_RESET} $APP_TITULO..."
         echo "${COLOR_GREEN}¡Hasta luego!\n${COLOR_RESET}"
+        registrarHoraLog
+        echo "Aplicación cerrada por el usuario." >>"$LOGFILE"
         break
         ;;
     *) echo "Opción inválida. Por favor, intente de nuevo." ;;
