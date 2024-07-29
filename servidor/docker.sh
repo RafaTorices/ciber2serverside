@@ -23,10 +23,10 @@ instalarDocker() {
     dialog --title "$APP_TITULO" --defaultno --yesno "\nDocker se ha instalado correctamente.\n*** Deberá reiniciar su servidor para poder usar Docker ***\nDesea reiniciarlo ahora?" 10 50
     respuesta=$?
     if [ $respuesta -eq 0 ]; then
-        dialog --title "$APP_TITULO" --infobox "\n\nReiniciando su servidor..." 5 50
+        dialog --title "$APP_TITULO" --infobox "\nReiniciando su servidor..." 5 50
         sleep 3
         exit
-        sudo reboot now
+        sudo reboot
     else
         dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada.\nReinicie manualmente su servidor cuando desee." 10 50
     fi
