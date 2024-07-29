@@ -13,7 +13,7 @@ mostrarOpcionesServidor() {
             2 "LAMP(Apache-MySQL-PHP)" \
             3 "Instalar phpMyAdmin" \
             4 "Utilidades" \
-            5 "Entorno DOCKER" \
+            5 "Instalar Entorno DOCKER" \
             0 "Volver al menú principal" \
             3>&1 1>&2 2>&3)
         clear
@@ -41,7 +41,7 @@ mostrarOpcionesServidor() {
             ;;
         3) desinstalarPhpMyAdmin ;;
         4) mostrarOpcionesUtilidades ;;
-        5) opcionNoDisponible ;;
+        5) instalar_docker ;;
         0)
             sh ./app.sh
             break
