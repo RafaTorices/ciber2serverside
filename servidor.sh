@@ -3,6 +3,7 @@
 # Import de las funciones
 . ./servidor/lamp.sh
 . ./servidor/utils.sh
+. ./servidor/docker.sh
 
 # Función para mostrar las opciones de config del servidor
 mostrarOpcionesServidor() {
