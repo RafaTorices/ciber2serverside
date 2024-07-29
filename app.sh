@@ -34,7 +34,7 @@ while true; do
         3 "VirtualHost de desarrollo WORDPRESS" \
         4 "VirtualHost de desarrollo JOOMLA" \
         5 "VirtualHost de plantilla web" \
-        6 "Cerrar y Salir" \
+        0 "Cerrar y Salir" \
         3>&1 1>&2 2>&3)
     clear
     case $opcion in
@@ -46,7 +46,7 @@ while true; do
     3) opcionNoDisponible ;;
     4) opcionNoDisponible ;;
     5) opcionNoDisponible ;;
-    6)
+    0)
         echo "\n${COLOR_RED}Cerrando${COLOR_RESET} $APP_TITULO..."
         echo "${COLOR_GREEN}¡Hasta luego!\n${COLOR_RESET}"
         break

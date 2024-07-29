@@ -2,6 +2,7 @@
 
 # Import de las funciones
 . ./servidor/lamp.sh
+. ./servidor/utils.sh
 
 # Función para mostrar las opciones de config del servidor
 mostrarOpcionesServidor() {
@@ -11,8 +12,9 @@ mostrarOpcionesServidor() {
             1 "Comprobar configuración de LAMP" \
             2 "LAMP(Apache-MySQL-PHP)" \
             3 "Instalar phpMyAdmin" \
-            4 "Entorno DOCKER" \
-            5 "Volver al menú principal" \
+            4 "Utilidades" \
+            5 "Entorno DOCKER" \
+            0 "Volver al menú principal" \
             3>&1 1>&2 2>&3)
         clear
         case $opcion in
@@ -20,10 +22,10 @@ mostrarOpcionesServidor() {
             comprobarServidor
             ;;
         2)
-            dialog --title "$APP_TITULO" --yesno "\nAtención!!\nEsta acción instalará y configurará su sistema con las versiones de Apache2.2, MySQL8.0, PHP7.x y PHP8.x.\nEsta acción realizará cambios en su servidor y podrá causar pérdida de datos, está seguro de continuar?" 13 50
+            dialog --title "$APP_TITULO" --defaultno --yesno "\nAtención!!\nEsta acción instalará y configurará su sistema con las versiones de Apache2.2, MySQL8.0, PHP7.x y PHP8.x.\nEsta acción realizará cambios en su servidor y podrá causar pérdida de datos, está seguro de continuar?" 13 50
             respuesta=$?
             if [ $respuesta -eq 0 ]; then
-                dialog --title "$APP_TITULO" --yesno "\nConfirme su decisión, desea continuar con la instalación?" 10 50
+                dialog --title "$APP_TITULO" --defaultno --yesno "\nConfirme su decisión, desea continuar con la instalación?" 10 50
                 segunda_respuesta=$?
                 if [ $segunda_respuesta -eq 0 ]; then
                     desinstalarApache2
@@ -38,8 +40,9 @@ mostrarOpcionesServidor() {
             fi
             ;;
         3) desinstalarPhpMyAdmin ;;
-        4) opcionNoDisponible ;;
-        5)
+        4) mostrarOpcionesUtilidades ;;
+        5) opcionNoDisponible ;;
+        0)
             sh ./app.sh
             break
             ;;

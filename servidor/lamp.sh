@@ -50,7 +50,7 @@ instalarMySQL8() {
 
 # PHP 8.x
 instalarPHP8() {
-    dialog --title "$APP_TITULO" --yesno "\nAtención!!\nContinuar con la instalación y configuración de PHP en su servidor?" 10 50
+    dialog --title "$APP_TITULO" --defaultno --yesno "\nAtención!!\nContinuar con la instalación y configuración de PHP en su servidor?" 10 50
     respuesta=$?
     if [ $respuesta -eq 0 ]; then
         dialog --title "$APP_TITULO" --infobox "\n\nInstalando y configurando PHP, espere..." 10 50
@@ -171,12 +171,12 @@ comprobarServidor() {
             1 "Apache" \
             2 "MySQL" \
             3 "PHP" \
-            4 "Volver atrás" \
+            0 "Volver atrás" \
             3>&1 1>&2 2>&3)
         clear
         case $opcion in
         1)
-            dialog --title "$APP_TITULO" --yesno "\n$apache2_status\n\n$apache2_version\n\n$apache2_servicio\n\nMódulos habilitados Apache2:\n$modules\n\n***¿Reiniciar el servicio?***\n" 20 50
+            dialog --title "$APP_TITULO" --defaultno --yesno "\n$apache2_status\n\n$apache2_version\n\n$apache2_servicio\n\nMódulos habilitados Apache2:\n$modules\n\n***¿Reiniciar el servicio?***\n" 20 50
             respuesta=$?
             if [ $respuesta -eq 0 ]; then
                 if comprobarServicio apache2 0; then
@@ -199,7 +199,7 @@ comprobarServidor() {
             fi
             ;;
         2)
-            dialog --title "$APP_TITULO" --yesno "\n$mysql_status\n\n$cleaned_version\n\n$mysql_servicio\n\n***¿Reiniciar el servicio?***" 20 50
+            dialog --title "$APP_TITULO" --defaultno --yesno "\n$mysql_status\n\n$cleaned_version\n\n$mysql_servicio\n\n***¿Reiniciar el servicio?***" 20 50
             respuesta=$?
             if [ $respuesta -eq 0 ]; then
                 if comprobarServicio mysql 0; then
@@ -225,7 +225,7 @@ comprobarServidor() {
             dialog --title "$APP_TITULO" --msgbox "\nVersiones de PHP disponibles:\n$php_versions\n\nExtensiones habilitadas de PHP:\n$extensions" 20 50
             break
             ;;
-        4)
+        0)
             break
             ;;
         *) echo "Opción inválida. Por favor, intente de nuevo." ;;
@@ -238,7 +238,7 @@ comprobarServidor() {
 desinstalarApache2() {
     if comprobarPaquete apache2 0; then
         {
-            dialog --title "$APP_TITULO" --yesno "\nInstalación de Apache2\nSe ha detectado que Apache2 ya está instalado en este servidor,\n¿desea continuar con la instalación?\n(Esta acción eliminará su paquete actual y reinstalará Apache2, puede causar pérdida de datos)\nDesea continuar?" 13 50
+            dialog --title "$APP_TITULO" --defaultno --yesno "\nInstalación de Apache2\nSe ha detectado que Apache2 ya está instalado en este servidor,\n¿desea continuar con la instalación?\n(Esta acción eliminará su paquete actual y reinstalará Apache2, puede causar pérdida de datos)\nDesea continuar?" 13 50
             respuesta=$?
             if [ $respuesta -eq 0 ]; then
                 registrarHoraLog
@@ -258,7 +258,7 @@ desinstalarApache2() {
         }
     else
         {
-            dialog --title "$APP_TITULO" --yesno "\nAtención!!\nContinuar con la instalación y configuración de Apache2 en su servidor?" 10 50
+            dialog --title "$APP_TITULO" --defaultno --yesno "\nAtención!!\nContinuar con la instalación y configuración de Apache2 en su servidor?" 10 50
             respuesta=$?
             if [ $respuesta -eq 0 ]; then
                 instalarApache2
@@ -277,7 +277,7 @@ desinstalarApache2() {
 desinstalarMySQL8() {
     if comprobarPaquete mysql-server 0; then
         {
-            dialog --title "$APP_TITULO" --yesno "\nInstalación de MySQL8.0\nSe ha detectado una instacia de MySQL en este servidor,\n¿desea continuar con la instalación?\n(Esta acción eliminará su paquete actual y reinstalará MySQL8.0, puede causar pérdida de datos)\nDesea continuar?" 13 50
+            dialog --title "$APP_TITULO" --defaultno --yesno "\nInstalación de MySQL8.0\nSe ha detectado una instacia de MySQL en este servidor,\n¿desea continuar con la instalación?\n(Esta acción eliminará su paquete actual y reinstalará MySQL8.0, puede causar pérdida de datos)\nDesea continuar?" 13 50
             respuesta=$?
             if [ $respuesta -eq 0 ]; then
                 registrarHoraLog
@@ -298,7 +298,7 @@ desinstalarMySQL8() {
         }
     else
         {
-            dialog --title "$APP_TITULO" --yesno "\nAtención!!\nContinuar con la instalación y configuración de MySQL8x en su servidor?" 10 50
+            dialog --title "$APP_TITULO" --defaultno --yesno "\nAtención!!\nContinuar con la instalación y configuración de MySQL8x en su servidor?" 10 50
             respuesta=$?
             if [ $respuesta -eq 0 ]; then
                 instalarMySQL8
@@ -367,7 +367,7 @@ establecerPasswordRootMySQL() {
 
 # Función para instalar phpmyadmin
 instalarPhpMyAdmin() {
-    dialog --title "$APP_TITULO" --yesno "\nAtención!!\nContinuar con la instalación y configuración de phpMyAdmin en su servidor?" 10 50
+    dialog --title "$APP_TITULO" --defaultno --yesno "\nAtención!!\nContinuar con la instalación y configuración de phpMyAdmin en su servidor?" 10 50
     respuesta=$?
     if [ $respuesta -eq 0 ]; then
         dialog --title "$APP_TITULO" --infobox "\n\nInstalando y configurando phpMyAdmin, espere..." 10 50
@@ -403,7 +403,7 @@ instalarPhpMyAdmin() {
 desinstalarPhpMyAdmin() {
     if comprobarPaquete phpmyadmin 0; then
         {
-            dialog --title "$APP_TITULO" --yesno "\nInstalación de phpMyAdmin\nSe ha detectado que phpMyAdmin ya está instalado en este servidor,\n¿desea continuar con la instalación?\n(Esta acción eliminará su paquete actual y reinstalará phpMyAdmin, puede causar pérdida de datos)\nDesea continuar?" 13 50
+            dialog --title "$APP_TITULO" --defaultno --yesno "\nInstalación de phpMyAdmin\nSe ha detectado que phpMyAdmin ya está instalado en este servidor,\n¿desea continuar con la instalación?\n(Esta acción eliminará su paquete actual y reinstalará phpMyAdmin, puede causar pérdida de datos)\nDesea continuar?" 13 50
             respuesta=$?
             if [ $respuesta -eq 0 ]; then
                 registrarHoraLog
