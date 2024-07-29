@@ -20,5 +20,5 @@ instalarDocker() {
     sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y >/dev/null 2>>"$LOGFILE"
     sudo usermod -aG docker $USER
     echo "Docker instalado correctamente." >>"$LOGFILE"
-    dialog --title "$APP_TITULO" ---msgbox "\nDocker se ha instalado correctamente.\n*** Deberá reiniciar su servidor para poder usar Docker ***" 10 50
+    dialog --title "$APP_TITULO" --msgbox "\nDocker se ha instalado correctamente.\n*** Deberá reiniciar su servidor para poder usar Docker ***" 10 50
 }
