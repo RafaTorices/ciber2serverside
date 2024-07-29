@@ -3,7 +3,6 @@
 # Import de las funciones
 . ./servidor/lamp.sh
 . ./servidor/utils.sh
-. ./servidor/docker.sh
 
 # Función para mostrar las opciones de config del servidor
 mostrarOpcionesServidor() {
@@ -14,7 +13,6 @@ mostrarOpcionesServidor() {
             2 "LAMP(Apache-MySQL-PHP)" \
             3 "Instalar phpMyAdmin" \
             4 "Utilidades" \
-            5 "Instalar Entorno DOCKER" \
             0 "Volver al menú principal" \
             3>&1 1>&2 2>&3)
         clear
@@ -42,16 +40,6 @@ mostrarOpcionesServidor() {
             ;;
         3) desinstalarPhpMyAdmin ;;
         4) mostrarOpcionesUtilidades ;;
-        5)
-            # Mostramos ventana dialog de instalación
-            dialog --title "$APP_TITULO" --defaultno --yesno "\nAtención!!\nEsta acción instalará Docker en su sistema.\nEsta acción realizará cambios en su servidor y podrá causar pérdida de datos, está seguro de continuar?" 13 50
-            respuesta=$?
-            if [ $respuesta -eq 0 ]; then
-                instalarDocker
-            else
-                dialog --title "$APP_TITULO" --msgbox "\n\nOperación cancelada, no se han producido cambios en su servidor." 10 50
-            fi
-            ;;
         0)
             sh ./app.sh
             break
