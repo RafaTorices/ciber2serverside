@@ -352,7 +352,12 @@ resumenServidor() {
     else
         php_versions=$(echo "$php_versions" | sort | uniq | tr '\n' ' ')
     fi
-    dialog --title "$APP_TITULO" --msgbox "\nConfiguración actual de su servidor:\n\n$apache2_status\n$apache2_servicio\n\n$mysql_status\n$mysql_servicio\n\nVersiones de PHP disponibles:\n$php_versions" 20 50
+    if comprobarPhpMyAdmin 0; then
+        phpmyadmin_status="phpMyAdmin está configurado OK en este servidor."
+    else
+        phpmyadmin_status="phpMyAdmin NO está configurado en este servidor."
+    fi
+    dialog --title "$APP_TITULO" --msgbox "\nConfiguración actual de su servidor:\n\n$apache2_status\n$apache2_servicio\n\n$mysql_status\n$mysql_servicio\n\nVersiones de PHP disponibles:\n$php_versions\n\n$phpmyadmin_status" 22 50
 }
 
 # Función para establecer el password del root de MySQL
