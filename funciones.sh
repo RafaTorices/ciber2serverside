@@ -171,6 +171,7 @@ comprobarServidor() {
             1 "Apache" \
             2 "MySQL" \
             3 "PHP" \
+            4 "phpMyAdmin" \
             0 "Volver atrás" \
             3>&1 1>&2 2>&3)
         clear
@@ -223,6 +224,15 @@ comprobarServidor() {
             ;;
         3)
             dialog --title "$APP_TITULO" --msgbox "\nVersiones de PHP disponibles:\n$php_versions\n\nExtensiones habilitadas de PHP:\n$extensions" 20 50
+            break
+            ;;
+        4)
+            if comprobarPhpMyAdmin 0; then
+                phpmyadmin_status="phpMyAdmin está configurado OK en este servidor."
+            else
+                phpmyadmin_status="phpMyAdmin NO está configurado en este servidor."
+            fi
+            dialog --title "$APP_TITULO" --msgbox "\n$phpmyadmin_status" 10 50
             break
             ;;
         0)
@@ -429,4 +439,14 @@ desinstalarPhpMyAdmin() {
 # Función para obtener la ip del servidor
 obtener_ip() {
     ip addr show | grep 'inet ' | grep -v '127.0.0.1' | awk '{print $2}' | cut -d/ -f1
+}
+
+# Función para comprorbar si phpmyadmin está instalado
+comprobarPhpMyAdmin() {
+    # Comprobar si el paquete phpMyAdmin está instalado
+    if dpkg -l | grep -q phpmyadmin; then
+        return 0
+    else
+        return 1
+    fi
 }
