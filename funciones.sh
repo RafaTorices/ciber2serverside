@@ -395,6 +395,7 @@ instalarPhpMyAdmin() {
             else
                 registrarHoraLog
                 echo "Paquete phpMyAdmin instalado con éxito." >>"$LOGFILE"
+                sudo ln -s /usr/share/phpmyadmin /var/www/html/phpmyadmin
                 reiniciarServicio apache2
                 if [ $? -ne 0 ]; then
                     mostrarErrorDialog "\n\nError al levantar el servicio Apache2, compruebe el archivo de log: $LOGFILE para más detalles."
