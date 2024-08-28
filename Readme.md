@@ -30,3 +30,5 @@ Seguir las instrucciones que se muestran en pantalla y utilizar las opciones que
 # Nota
 
 Comprobar que el usuario que ejecuta el script tiene permisos sudo, que el script tiene permisos de ejecución, que el script se ejecuta en un sistema operativo Ubuntu/Debian y que el directorio tiene permisos de escritura.
+
+---
